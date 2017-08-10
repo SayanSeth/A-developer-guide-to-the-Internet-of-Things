@@ -1,0 +1,13 @@
+{
+  "name": "lesson04-skeleton",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cfenv": "1.0.3",
+    "express": "4.13.4",
+    "ibmiotf": "0.2.11"
+  }
+}

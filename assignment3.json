@@ -1,0 +1,92 @@
+[
+    {
+        "id": "c211f893.a35588",
+        "type": "tab",
+        "label": "Flow 2"
+    },
+    {
+        "id": "9073a64a.511958",
+        "type": "wiotp out",
+        "z": "c211f893.a35588",
+        "authType": "d",
+        "qs": "true",
+        "qsDeviceId": "9073a64a.511958",
+        "deviceKey": "",
+        "deviceType": "",
+        "deviceId": "",
+        "event": "event",
+        "format": "json",
+        "name": "",
+        "x": 730,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "997db117.9230b",
+        "type": "debug",
+        "z": "c211f893.a35588",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 750,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "ccb199b0.0a54e8",
+        "type": "inject",
+        "z": "c211f893.a35588",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 133,
+        "y": 128,
+        "wires": [
+            [
+                "17c2f58e.9bcc6a"
+            ]
+        ]
+    },
+    {
+        "id": "17c2f58e.9bcc6a",
+        "type": "exec",
+        "z": "c211f893.a35588",
+        "command": "vcgencmd measure_temp",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "",
+        "timer": "",
+        "name": "CPU Temp",
+        "x": 330,
+        "y": 120,
+        "wires": [
+            [
+                "b1c808b9.780a28"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b1c808b9.780a28",
+        "type": "function",
+        "z": "c211f893.a35588",
+        "name": "format data",
+        "func": "str = msg.payload;\n// pattern = /[0-9]/g; \n// result = str.search(pattern);\nresult = str.slice(5,9);\n\nvalue = parseFloat(result)\nmsg.payload = {'d' : {'temp' : value }};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 530,
+        "y": 100,
+        "wires": [
+            [
+                "997db117.9230b",
+                "9073a64a.511958"
+            ]
+        ]
+    }
+]

@@ -1,0 +1,297 @@
+[
+    {
+        "id": "f0ce8345.2dc67",
+        "type": "tab",
+        "label": "Flow 4"
+    },
+    {
+        "id": "6c94f764.9e1d08",
+        "type": "debug",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 720,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "872af664.64e498",
+        "type": "inject",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 60,
+        "wires": [
+            [
+                "1118a5f1.37bafa"
+            ]
+        ]
+    },
+    {
+        "id": "1118a5f1.37bafa",
+        "type": "exec",
+        "z": "f0ce8345.2dc67",
+        "command": "vcgencmd measure_temp",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "",
+        "timer": "",
+        "name": "CPU Temp",
+        "x": 317,
+        "y": 52,
+        "wires": [
+            [
+                "d6fdd927.cbcc08"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d6fdd927.cbcc08",
+        "type": "function",
+        "z": "f0ce8345.2dc67",
+        "name": "format data",
+        "func": "str = msg.payload;\n// pattern = /[0-9]/g; \n// result = str.search(pattern);\nresult = str.slice(5,9);\n\nvalue = parseFloat(result)\nmsg.payload = {'d' : {'temp' : value }};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 499,
+        "y": 60,
+        "wires": [
+            [
+                "6c94f764.9e1d08",
+                "799bbfb5.8df58"
+            ]
+        ]
+    },
+    {
+        "id": "799bbfb5.8df58",
+        "type": "wiotp out",
+        "z": "f0ce8345.2dc67",
+        "authType": "g",
+        "qs": "false",
+        "qsDeviceId": "",
+        "deviceKey": "fa276111.a1fba",
+        "deviceType": "",
+        "deviceId": "",
+        "event": "event",
+        "format": "json",
+        "name": "",
+        "x": 704,
+        "y": 166,
+        "wires": []
+    },
+    {
+        "id": "1c6779ed.539d86",
+        "type": "rpi-sensehatsim in",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "motion": false,
+        "env": true,
+        "stick": false,
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "14873cbf.a4dfc3",
+                "bc452c4e.685d4",
+                "930b21f1.848e1"
+            ]
+        ]
+    },
+    {
+        "id": "77cf56d2.44ae18",
+        "type": "debug",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 547,
+        "y": 212,
+        "wires": []
+    },
+    {
+        "id": "4f8d14df.1dc8cc",
+        "type": "wiotp out",
+        "z": "f0ce8345.2dc67",
+        "authType": "g",
+        "qs": "false",
+        "qsDeviceId": "",
+        "deviceKey": "fa276111.a1fba",
+        "deviceType": "senseHAT",
+        "deviceId": "senrpi123",
+        "event": "event",
+        "format": "json",
+        "name": "",
+        "x": 777,
+        "y": 272,
+        "wires": []
+    },
+    {
+        "id": "14873cbf.a4dfc3",
+        "type": "delay",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "5",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 327,
+        "y": 272,
+        "wires": [
+            [
+                "77cf56d2.44ae18",
+                "1765ea5d.4b14b6"
+            ]
+        ]
+    },
+    {
+        "id": "1765ea5d.4b14b6",
+        "type": "function",
+        "z": "f0ce8345.2dc67",
+        "name": "format data senseHAT",
+        "func": "temperature = msg.payload.temperature;\nhumidity = msg.payload.humidity;\nmsg.payload = {\"d\":{\"temperature\":temperature,\"humidity\":humidity}}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 557,
+        "y": 272,
+        "wires": [
+            [
+                "291a1c0f.c72334",
+                "4f8d14df.1dc8cc"
+            ]
+        ]
+    },
+    {
+        "id": "291a1c0f.c72334",
+        "type": "debug",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 787,
+        "y": 332,
+        "wires": []
+    },
+    {
+        "id": "81a1b1a7.d44b8",
+        "type": "wiotp in",
+        "z": "f0ce8345.2dc67",
+        "authType": "d",
+        "deviceKey": "5795e8eb.96e088",
+        "deviceType": "",
+        "deviceId": "",
+        "command": "+",
+        "commandType": "g",
+        "name": "final",
+        "x": 90,
+        "y": 440,
+        "wires": [
+            [
+                "a1ab67e6.43a118",
+                "bc452c4e.685d4"
+            ]
+        ]
+    },
+    {
+        "id": "ff4f3b48.0fc308",
+        "type": "rpi-sensehatsim out",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "x": 570,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "a1ab67e6.43a118",
+        "type": "function",
+        "z": "f0ce8345.2dc67",
+        "name": "Caching command",
+        "func": "var command = msg.payload.screen;\nglobal.set('command',command);\nmsg.payload = command;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 320,
+        "y": 480,
+        "wires": [
+            [
+                "853d1e99.86a39"
+            ]
+        ]
+    },
+    {
+        "id": "853d1e99.86a39",
+        "type": "debug",
+        "z": "f0ce8345.2dc67",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 540,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "bc452c4e.685d4",
+        "type": "function",
+        "z": "f0ce8345.2dc67",
+        "name": "finalflow",
+        "func": "var lastCmd = global.get('command');\nvar lastTemp = global.get('temp')\nvar a = parseInt(lastTemp/10);\nvar b = parseInt(lastTemp%10);\n\nswitch (lastCmd)\n{\n    case 'on':\n    {\n        switch (a)\n        {\n            case 0:\n            str1 = \"\\n*,*,maroon\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 1:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 2:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-2,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 3:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-3,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 4:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-4,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n            case 5:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-5,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n            case 6:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-6,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 7:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-6,silver\"+ \"\\n2,1,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 8:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-6,silver\"+ \"\\n2,1-2,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 9:\n            str1 = \"\\n*,*,maroon\" + \"\\n1,1-6,silver\"+ \"\\n2,1-3,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            default:\n            str1 = \"\\n*,*,maroon\";\n            str2 = \"\";\n            break;\n\n        }\nbreak;\n    }\ncase 'off':\n    {\n        switch (a)\n        {\n            case 0:\n            str1 = \"\\n*,*,green\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 1:\n            str1 = \"\\n*,*,green\" + \"\\n1,1,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 2:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-2,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 3:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-3,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 4:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-4,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n            case 5:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-5,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n            case 6:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-6,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 7:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-6,silver\"+ \"\\n2,1,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 8:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-6,silver\"+ \"\\n2,1-2,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 9:\n            str1 = \"\\n*,*,green\" + \"\\n1,1-6,silver\"+ \"\\n2,1-3,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            default:\n            str1 = \"\\n*,*,green\";\n            str2 = \"\";\n            break;\n        }\nbreak;\n    }\ndefault:\n    {\n        switch (a)\n        {\n            case 0:\n            str1 = \"\\n*,*,black\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 1:\n            str1 = \"\\n*,*,black\" + \"\\n1,1,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 2:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-2,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 3:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-3,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 4:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-4,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n            case 5:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-5,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n            case 6:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-6,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 7:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-6,silver\"+ \"\\n2,1,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 8:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-6,silver\"+ \"\\n2,1-2,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            case 9:\n            str1 = \"\\n*,*,black\" + \"\\n1,1-6,silver\"+ \"\\n2,1-3,silver\";\n            //\n            switch (b)\n{\n        case 0:\n        str2 = \"\";\n        break;\n        case 1:\n        str2 =\"\\n5,1,silver\";\n        break;\n        case 2:\n        str2 =\"\\n5,1-2,silver\";\n        break;\n        case 3:\n        str2 =\"\\n5,1-3,silver\";\n        break;\n        case 4:\n        str2 =\"\\n5,1-4,silver\";\n        break;\n        case 5:\n        str2 =\"\\n5,1-5,silver\";\n        break;\n        case 6:\n        str2 =\"\\n5,1-6,silver\";\n        break;\n        case 7:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1,silver\";\n        break;\n        case 8:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-2,silver\";\n        break;\n        case 9:\n        str2 =\"\\n5,1-6,silver\"+ \"\\n6,1-3,silver\";\n        break;\n}\n\n            break;\n\n            default:\n            str1 = \"\\n*,*,black\";\n            str2 = \"\";\n            break;\n        }\n    }\n}\nmsg.payload = str1.concat(str2);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380,
+        "y": 380,
+        "wires": [
+            [
+                "ff4f3b48.0fc308"
+            ]
+        ]
+    },
+    {
+        "id": "930b21f1.848e1",
+        "type": "function",
+        "z": "f0ce8345.2dc67",
+        "name": "Caching Temperature",
+        "func": "temp = msg.payload.temperature;\nglobal.set('temp',temp);\nmsg.payload = temp;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fa276111.a1fba",
+        "type": "wiotp-credentials",
+        "z": "",
+        "name": "",
+        "org": "xnf2sg",
+        "devType": "rpigateway",
+        "devId": "rpi123"
+    },
+    {
+        "id": "5795e8eb.96e088",
+        "type": "wiotp-credentials",
+        "z": "",
+        "name": "",
+        "org": "xnf2sg",
+        "devType": "senseHAT",
+        "devId": "senrpi123"
+    }
+]

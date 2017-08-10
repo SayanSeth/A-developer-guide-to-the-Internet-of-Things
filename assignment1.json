@@ -1,0 +1,70 @@
+[
+    {
+        "id": "8a4056f4.ce53d8",
+        "type": "tab",
+        "label": "Flow 2"
+    },
+    {
+        "id": "9cb00c0a.90753",
+        "type": "inject",
+        "z": "8a4056f4.ce53d8",
+        "name": "Inject",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "54283d75.a8b224"
+            ]
+        ]
+    },
+    {
+        "id": "2a857221.1acd4e",
+        "type": "debug",
+        "z": "8a4056f4.ce53d8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 665,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a784e8f8.066448",
+        "type": "function",
+        "z": "8a4056f4.ce53d8",
+        "name": "generate output",
+        "func": "if ( msg.payload < 5)\n{\n    return {\"payload\" : \"Number \" + msg.payload + \" is a low number\"};\n}\nelse\n{\n    return {\"payload\" : \"Number \" + msg.payload + \" is a high number\"};\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 480,
+        "y": 100,
+        "wires": [
+            [
+                "2a857221.1acd4e"
+            ]
+        ]
+    },
+    {
+        "id": "54283d75.a8b224",
+        "type": "random",
+        "z": "8a4056f4.ce53d8",
+        "name": "Random int",
+        "low": "1",
+        "high": "10",
+        "inte": "true",
+        "x": 299,
+        "y": 100,
+        "wires": [
+            [
+                "a784e8f8.066448"
+            ]
+        ]
+    }
+]

@@ -1,0 +1,4 @@
+numpy==1.13.0
+websocket-client==0.44.0
+websocket-server==0.4
+ibmiotf==0.2.8
